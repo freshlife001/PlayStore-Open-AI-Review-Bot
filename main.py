@@ -10,9 +10,10 @@ with open("config.yaml", "r") as config_file:
 app_package_name = config["app_package_name"]
 key_file = config["key_file"]
 openai.api_key = config["openai_key"]
+openai.api_base = config["openai_base"]
 dry_run = config["dry_run"]
 pre_prompt = config["pre_prompt"]
-
+user_prompt = config["user_prompt"]
 
 # httplib2.debuglevel = 1
 
@@ -43,18 +44,13 @@ def get_openai_response(review_text, starts, authorName):
     messages = [
         {"role": "system", "content": pre_prompt},
         {"role": "user",
-         "content": f"A user left a review for our app: '{review_text}' with '{starts}/5 stars, and the author is named '{authorName}''\n"
-                    f"Please note the following before responding to the review:\n"
-                    f"- In case you can't provide a certain answer, tell the user to open \n"
-                    f"a ticket from the control panel\n"
-                    f"The full response must be up to 350 characters\n"
-                    f"Provide just the final answer to send to the user, without any placeholder or human action required"
+         "content": f"A user left a review for our app: '{review_text}' with '{starts}/5 stars, and the author is named '{authorName}''\n" + user_prompt
          }
     ]
 
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="deepseek-chat",
             temperature=0.7,
             stream=False,
             messages=messages
