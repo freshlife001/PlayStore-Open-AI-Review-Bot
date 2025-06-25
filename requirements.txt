@@ -2,7 +2,7 @@ aiohttp
 aiosignal
 async-timeout
 attrs
-cachetools
+cachetools==5.3.0
 certifi
 charset-normalizer
 frozenlist
